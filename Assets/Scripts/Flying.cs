@@ -42,7 +42,9 @@ public class Flying : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space))
         {
+            rigidbdy.freezeRotation = true;
             rigidbdy.AddRelativeForce(0, acceleration*Time.deltaTime, 0);
+            rigidbdy.freezeRotation = false;
         }
     }
 }
