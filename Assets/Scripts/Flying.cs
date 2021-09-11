@@ -6,12 +6,14 @@ using UnityEngine;
 public class Flying : MonoBehaviour
 {
     Rigidbody rigidbdy;
+    AudioSource audioSource;
     [SerializeField] float acceleration = 100f;
     [SerializeField] float rotationSpeed = 100f;
     // Start is called before the first frame update
     void Start()
     {
         rigidbdy = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -35,16 +37,24 @@ public class Flying : MonoBehaviour
 
     private void Rotation(float rotationThisFrame)
     {
+        rigidbdy.freezeRotation = true;
         transform.Rotate(0, 0, rotationThisFrame * Time.deltaTime);
+        rigidbdy.freezeRotation = false;
     }
 
     private void Fly()
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            rigidbdy.freezeRotation = true;
             rigidbdy.AddRelativeForce(0, acceleration*Time.deltaTime, 0);
-            rigidbdy.freezeRotation = false;
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            audioSource.Pause();
         }
     }
 }
