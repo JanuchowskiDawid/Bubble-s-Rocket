@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4887418860442906211}
   m_Layer: 0
   m_Name: Meta plate
-  m_TagString: Untagged
+  m_TagString: Meta
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
