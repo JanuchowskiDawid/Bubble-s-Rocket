@@ -9,6 +9,7 @@ public class Flying : MonoBehaviour
     AudioSource audioSource;
     [SerializeField] float acceleration = 100f;
     [SerializeField] float rotationSpeed = 100f;
+    [SerializeField] AudioClip engine;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,8 +20,11 @@ public class Flying : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Fly();
-        Rotate();
+        if (!GetComponent<CollisionHandler>().isTransitioning)
+        {
+            Fly();
+            Rotate();
+        }
     }
 
     private void Rotate()
@@ -47,9 +51,9 @@ public class Flying : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             rigidbdy.AddRelativeForce(0, acceleration*Time.deltaTime, 0);
-            if (!audioSource.isPlaying)
+            if (!audioSource.isPlaying && !GetComponent<CollisionHandler>().isTransitioning)
             {
-                audioSource.Play();
+                audioSource.PlayOneShot(engine);
             }
         }
         else
