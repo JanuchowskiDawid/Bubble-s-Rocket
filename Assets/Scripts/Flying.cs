@@ -10,6 +10,11 @@ public class Flying : MonoBehaviour
     [SerializeField] float acceleration = 100f;
     [SerializeField] float rotationSpeed = 100f;
     [SerializeField] AudioClip engine;
+
+    [SerializeField] ParticleSystem mainBooster;
+    [SerializeField] ParticleSystem leftBooster;
+    [SerializeField] ParticleSystem rightBooster;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,11 +36,24 @@ public class Flying : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.A))
         {
+            if (!rightBooster.isPlaying)
+            {
+                rightBooster.Play();
+            }
             Rotation(rotationSpeed);
         }
         else if (Input.GetKey(KeyCode.D))
         {
             Rotation(-rotationSpeed);
+            if (!leftBooster.isPlaying)
+            {
+                leftBooster.Play();
+            }
+        }
+        else
+        {
+            rightBooster.Stop();
+            leftBooster.Stop();
         }
     }
 
@@ -55,9 +73,14 @@ public class Flying : MonoBehaviour
             {
                 audioSource.PlayOneShot(engine);
             }
+            if (!mainBooster.isPlaying)
+            {
+                mainBooster.Play();
+            }
         }
         else
         {
+            mainBooster.Stop();
             audioSource.Pause();
         }
     }
