@@ -31,30 +31,58 @@ public class Flying : MonoBehaviour
             Rotate();
         }
     }
+    
+    private void Fly()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            BoostYourself();
+        }
+        else
+        {
+            mainBooster.Stop();
+            audioSource.Pause();
+        }
+    }
 
     private void Rotate()
     {
         if (Input.GetKey(KeyCode.A))
         {
-            if (!rightBooster.isPlaying)
-            {
-                rightBooster.Play();
-            }
-            Rotation(rotationSpeed);
+            RotateLeft();
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            Rotation(-rotationSpeed);
-            if (!leftBooster.isPlaying)
-            {
-                leftBooster.Play();
-            }
+            RotateRight();
         }
         else
         {
-            rightBooster.Stop();
-            leftBooster.Stop();
+            StopRotating();
         }
+    }
+
+    private void StopRotating()
+    {
+        rightBooster.Stop();
+        leftBooster.Stop();
+    }
+
+    private void RotateRight()
+    {
+        Rotation(-rotationSpeed);
+        if (!leftBooster.isPlaying)
+        {
+            leftBooster.Play();
+        }
+    }
+
+    private void RotateLeft()
+    {
+        if (!rightBooster.isPlaying)
+        {
+            rightBooster.Play();
+        }
+        Rotation(rotationSpeed);
     }
 
     private void Rotation(float rotationThisFrame)
@@ -64,24 +92,18 @@ public class Flying : MonoBehaviour
         rigidbdy.freezeRotation = false;
     }
 
-    private void Fly()
+
+
+    private void BoostYourself()
     {
-        if (Input.GetKey(KeyCode.Space))
+        rigidbdy.AddRelativeForce(0, acceleration * Time.deltaTime, 0);
+        if (!audioSource.isPlaying && !GetComponent<CollisionHandler>().isTransitioning)
         {
-            rigidbdy.AddRelativeForce(0, acceleration*Time.deltaTime, 0);
-            if (!audioSource.isPlaying && !GetComponent<CollisionHandler>().isTransitioning)
-            {
-                audioSource.PlayOneShot(engine);
-            }
-            if (!mainBooster.isPlaying)
-            {
-                mainBooster.Play();
-            }
+            audioSource.PlayOneShot(engine);
         }
-        else
+        if (!mainBooster.isPlaying)
         {
-            mainBooster.Stop();
-            audioSource.Pause();
+            mainBooster.Play();
         }
     }
 }
